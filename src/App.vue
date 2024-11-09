@@ -82,7 +82,7 @@ export default {
 .dark-mode {
   --primary-color: #1E293B;
   --secondary-color: #111827;
-  --accent-color: #10B981;
+  --accent-color: #aceafa;
   --background-color: #0F172A;
   --text-color: #F9FAFB;
 }

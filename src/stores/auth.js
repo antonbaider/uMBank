@@ -80,6 +80,7 @@ export const useAuthStore = defineStore('auth', {
         // **Removed the conflicting 'isLoggedIn' action**
         // If you have other actions, keep them here without naming conflicts.
     },
+    persist: true,
 });
 
 export default useAuthStore;
