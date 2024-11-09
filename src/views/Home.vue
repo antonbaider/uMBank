@@ -11,11 +11,11 @@
       >
         <defs>
           <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" style="stop-color:var(--primary-color);stop-opacity:1" />
-            <stop offset="100%" style="stop-color:var(--accent-color);stop-opacity:1" />
+            <stop offset="0%" style="stop-color:var(--primary-color);stop-opacity:1"/>
+            <stop offset="100%" style="stop-color:var(--accent-color);stop-opacity:1"/>
           </linearGradient>
           <filter id="f1" x="0" y="0">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="5" />
+            <feGaussianBlur in="SourceGraphic" stdDeviation="5"/>
           </filter>
         </defs>
         <path
@@ -55,7 +55,7 @@
             viewBox="0 0 300 300"
             class="illustration-svg"
         >
-          <circle cx="150" cy="150" r="100" fill="none" stroke="#FFFFFF" stroke-width="5" />
+          <circle cx="150" cy="150" r="100" fill="none" stroke="#FFFFFF" stroke-width="5"/>
           <path
               d="M150 50 L170 150 L130 150 Z"
               fill="#FFFFFF"
@@ -118,7 +118,7 @@ export default {
 /* Enhanced Hero Section */
 .hero {
   position: relative;
-  width: 100%;
+  width: 100vw;
   height: 80vh;
   overflow: hidden;
   display: flex;
@@ -131,7 +131,7 @@ export default {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
+  width: 100vw;
   height: 100%;
   z-index: 0;
 }
@@ -142,9 +142,9 @@ export default {
   z-index: 2;
   text-align: center;
   color: #ffffff;
-  max-width: 700px;
+  width: 100%;
   padding: 0 20px;
-  animation: fadeIn 2s ease-out;
+  animation: fadeIn 4s ease-out;
 }
 
 .hero-title {
@@ -166,8 +166,8 @@ export default {
 
 .cta-button {
   padding: 15px 30px;
-  background-color: #38bdf8; /* Bright accent color */
-  color: #f0f4ff; /* Dark text color for contrast */
+  background-color: #38bdf8;
+  color: #f0f4ff;
   border: none;
   border-radius: 50px;
   text-decoration: none;
@@ -178,7 +178,7 @@ export default {
 }
 
 .cta-button:hover {
-  background-color: #0ea5e9; /* Slightly darker on hover */
+  background-color: #0ea5e9;
   transform: translateY(-4px);
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
 }
@@ -256,7 +256,7 @@ export default {
 }
 
 .feature-icon {
-  color: #38bdf8; /* Match CTA button accent color */
+  color: #38bdf8;
   margin-bottom: 15px;
 }
 
@@ -298,7 +298,7 @@ export default {
   }
 
   .hero-illustration {
-    display: none; /* Hide illustration on smaller screens */
+    display: none;
   }
 
   .hero-title {

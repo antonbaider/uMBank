@@ -16,6 +16,7 @@
         <router-link v-if="isLoggedIn" to="/dashboard" class="nav-link">Dashboard</router-link>
         <router-link v-if="isLoggedIn" to="/accounts" class="nav-link">Accounts</router-link>
         <router-link v-if="isLoggedIn" to="/payment" class="nav-link">Payment</router-link>
+        <router-link v-if="isLoggedIn" to="/support" class="nav-link">Support</router-link>
       </nav>
       <div class="auth-section">
         <span v-if="isLoggedIn" class="user-info">
@@ -293,5 +294,28 @@ button, .login-button {
 
 .dark-mode button, .dark-mode .login-button {
   box-shadow: 0 4px 6px rgba(255, 255, 255, 0.1);
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes floatUp {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }
 </style>

@@ -7,6 +7,7 @@ import Dashboard from '@/views/Dashboard.vue';
 import Profile from '@/views/Profile.vue';
 import Accounts from "@/views/Accounts.vue";
 import Payment from "@/views/Payment.vue";
+import Support from "@/components/Support.vue";
 
 const routes = [
     { path: '/', name: 'Home', component: Home },
@@ -15,6 +16,7 @@ const routes = [
     { path: '/dashboard', name: 'Dashboard', component: Dashboard, meta: { requiresAuth: true } },
     { path: '/accounts', name: 'Accounts', component: Accounts, meta: { requiresAuth: true } },
     { path: '/payment', name: 'Pay', component: Payment, meta: { requiresAuth: true } },
+    { path: '/support', name: 'Support', component: Support, meta: { requiresAuth: true } },
     { path: '/profile', name: 'Profile', component: Profile, meta: { requiresAuth: true } },
 ];
 
