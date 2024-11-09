@@ -1,20 +1,19 @@
-<!-- src/views/Accounts.vue -->
 <template>
   <div class="accounts-page">
-    <!--    <h1>Your Accounts</h1>-->
-
     <section class="accounts-list">
       <div v-if="loading" class="loading">
         <i class="fas fa-spinner fa-spin fa-3x"></i>
         <p>Loading your accounts...</p>
       </div>
-
       <div v-else>
         <div v-if="accounts.length" class="account-card" v-for="(account, index) in accounts" :key="index">
           <div class="account-header">
             <i class="fas fa-credit-card fa-2x account-icon"></i>
             <div class="account-info">
-              <h3>{{ account.cardNumber }}</h3>
+              <!-- Toggle between masked and full card number on click -->
+              <h3 @click="toggleCardVisibility(index)">
+                {{ visibleCards[index] ? account.cardNumber : maskCardNumber(account.cardNumber) }}
+              </h3>
               <p>{{ account.currency }}</p>
             </div>
           </div>
@@ -40,12 +39,15 @@ export default {
   setup() {
     const accounts = ref([]);
     const loading = ref(true);
+    const visibleCards = ref([]); // Array to track visibility for each card number
 
+    // Fetch accounts data from API
     const fetchAccounts = async () => {
       try {
         const response = await api.get('/api/accounts');
         if (response.data && response.data.data) {
           accounts.value = response.data.data;
+          visibleCards.value = Array(accounts.value.length).fill(false); // Initialize visibility to false for each card
         } else {
           console.error('No account data found.');
         }
@@ -54,6 +56,16 @@ export default {
       } finally {
         loading.value = false;
       }
+    };
+
+    // Toggle card visibility for a specific card index
+    const toggleCardVisibility = (index) => {
+      visibleCards.value[index] = !visibleCards.value[index];
+    };
+
+    // Mask the card number to show only the last 4 digits
+    const maskCardNumber = (cardNumber) => {
+      return '**** **** **** ' + cardNumber.slice(-4);
     };
 
     const formatCurrency = (amount, currency) => {
@@ -75,6 +87,9 @@ export default {
     return {
       accounts,
       loading,
+      visibleCards,
+      toggleCardVisibility,
+      maskCardNumber,
       formatCurrency,
       formatDate,
     };
@@ -87,12 +102,6 @@ export default {
   padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
-}
-
-.accounts-page h1 {
-  text-align: center;
-  margin-bottom: 30px;
-  color: var(--text-color);
 }
 
 .accounts-list {
@@ -145,6 +154,7 @@ export default {
   margin: 0;
   font-size: 1.2rem;
   color: var(--text-color);
+  cursor: pointer; /* Indicate that the card number is clickable */
 }
 
 .account-info p {

@@ -80,7 +80,7 @@
 import { ref, onMounted, computed } from 'vue';
 import api from '@/services/api.js';
 import Chart from 'chart.js/auto';
-import LineChart from '@/components/LineChart.vue';
+import LineChart from "@/components/LineChart.vue";
 
 export default {
   name: 'Dashboard',
