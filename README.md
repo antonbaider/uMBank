@@ -41,7 +41,7 @@ Welcome to **BankApp**, a user-friendly banking dashboard to manage transactions
 
 1. **Clone the repository:**
    ```bash
-   git clone [https://github.com/yourusername/bankapp.git](https://github.com/antonbaider/uMBank.git)
+   git clone https://github.com/antonbaider/uMBank.git
    ```
 
 2. **Navigate to the project directory:**
