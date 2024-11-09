@@ -22,11 +22,14 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    
-    # Set up environment variables
-    - name: Set API key environment variable
-      run: echo "VUE_APP_API_KEY=${{ secrets.API_KEY }}" >> $GITHUB_ENV
-    
-    - run: npm ci
-    - run: npm run build --if-present
+
+    - name: Install dependencies
+      run: npm ci
+
+    # Expose the API key for the build step
+    - name: Build with API Key
+      env:
+        VUE_APP_API_KEY: ${{ secrets.API_KEY }}
+      run: npm run build
+
     - run: npm test
