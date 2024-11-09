@@ -167,7 +167,7 @@ export default {
   align-items: center;
   min-height: 100vh;
   padding: 20px;
-
+  margin-top: -50px;
 }
 
 .payment-card {
@@ -187,6 +187,7 @@ export default {
   font-weight: 600;
 }
 
+/* Remaining styles unchanged */
 .form-group {
   margin-bottom: 20px;
   text-align: left;
@@ -199,7 +200,8 @@ export default {
   color: #555;
 }
 
-.form-group input, .form-group select {
+.form-group input,
+.form-group select {
   width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
@@ -267,5 +269,4 @@ export default {
 .transaction-info li {
   margin-bottom: 10px;
   font-size: 1rem;
-}
-</style>
+}</style>

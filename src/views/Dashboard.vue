@@ -33,16 +33,20 @@
     <section
         class="chart-section"
         :style="{
-    padding: '20px',
+        padding: '20px',
     maxWidth: '600px',
     margin: '40px auto',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    textAlign: 'center'
+    textAlign: 'center',
+    backgroundColor: '#ffffff',
+    borderRadius: '20px',
+    boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)'
   }"
-    >
-      <LineChart :expenses="monthlyExpensesByCurrency" :deposits="recentDepositsByCurrency" />
+    ><canvas id="expensesChart"></canvas>
+      <LineChart :expenses="monthlyExpensesByCurrency" :deposits="recentDepositsByCurrency"/>
+      <canvas id="depositsChart"></canvas>
     </section>
 
     <section class="transactions">
@@ -72,12 +76,11 @@
     </section>
 
 
-
   </div>
 </template>
 
 <script>
-import { ref, onMounted, computed } from 'vue';
+import {computed, onMounted, ref} from 'vue';
 import api from '@/services/api.js';
 import Chart from 'chart.js/auto';
 import LineChart from "@/components/LineChart.vue";
