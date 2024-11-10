@@ -1,8 +1,12 @@
-# MBank Frontend
 
-This is the frontend of the MBank application, built with Vue.js. It serves as the user interface for interacting with the backend of MBank, providing features like user authentication, account management, and transaction handling.
+# 💻 MBank Frontend
 
-## Table of Contents
+This is the frontend of the MBank application, built with Vue.js. It provides the user interface for interacting with the backend of MBank, enabling features such as user authentication, account management, and transaction handling.
+
+---
+
+## 📋 Table of Contents
+
 - [Requirements](#requirements)
 - [Project Structure](#project-structure)
 - [Setup and Installation](#setup-and-installation)
@@ -12,12 +16,16 @@ This is the frontend of the MBank application, built with Vue.js. It serves as t
 - [Contributing](#contributing)
 - [License](#license)
 
-## Requirements
+---
 
-- Node.js >= 14.x
-- npm >= 6.x or Yarn >= 1.x
+## 🛠 Requirements
 
-## Project Structure
+- **Node.js** >= 14.x
+- **npm** >= 6.x or **Yarn** >= 1.x
+
+---
+
+## 📂 Project Structure
 
 ```
 ├── public/                # Static files
@@ -37,11 +45,13 @@ This is the frontend of the MBank application, built with Vue.js. It serves as t
 └── package.json           # Project metadata and dependencies
 ```
 
-## Setup and Installation
+---
+
+## 📥 Setup and Installation
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/antonbaider/uBank.git
+   git clone https://github.com/your-username/mbank-frontend.git
    cd mbank-frontend
    ```
 
@@ -50,7 +60,9 @@ This is the frontend of the MBank application, built with Vue.js. It serves as t
    npm install
    ```
 
-## Environment Variables
+---
+
+## 🔧 Environment Variables
 
 Create a `.env` file in the root of the project, and add the following variables:
 
@@ -60,7 +72,9 @@ VITE_API_URL=http://localhost:8080   # Backend API URL
 
 For production, replace `localhost` with the actual backend URL.
 
-## Running the Project
+---
+
+## 🚀 Running the Project
 
 ### Development Mode
 
@@ -82,7 +96,9 @@ npm run build
 
 This will generate optimized files in the `dist` directory.
 
-### Docker
+---
+
+### 🐳 Docker
 
 To run the frontend in a Docker container:
 
@@ -96,14 +112,20 @@ To run the frontend in a Docker container:
    docker run -p 80:80 mbank-frontend
    ```
 
-## Deployment
+---
+
+## 🌐 Deployment
 
 To deploy, serve the contents of the `dist` directory on your preferred static file server or platform (e.g., Vercel, Netlify).
 
-## Contributing
+---
+
+## 🤝 Contributing
 
 Please ensure all pull requests pass linting and formatting checks, and provide a descriptive commit message.
 
-## License
+---
+
+## 📜 License
 
 This project is licensed under the MIT License. See `LICENSE` for details.
