@@ -1,6 +1,7 @@
 <!-- src/App.vue -->
 <template>
   <div id="app">
+
     <!-- Navigation Bar -->
     <header class="navbar">
       <div class="logo-section">
@@ -26,10 +27,10 @@
         <router-link v-else to="/login" class="login-button">Login</router-link>
       </div>
     </header>
-
     <!-- Main Content -->
     <main class="main-content">
       <router-view/>
+      <Popup />
     </main>
 
     <!-- Footer -->
@@ -43,9 +44,10 @@
 import { computed } from 'vue';
 import { useAuthStore } from '@/stores/auth.js';
 import Payment from "@/views/Payment.vue";
+import Popup from "@/components/Popup.vue";
 
 export default {
-  components: {Payment},
+  components: {Payment,  Popup},
   setup() {
     const auth = useAuthStore();
     const isLoggedIn = computed(() => auth.isLoggedIn);

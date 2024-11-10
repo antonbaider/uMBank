@@ -3,6 +3,7 @@ import { defineStore } from 'pinia';
 import { decodeJwt } from 'jose';
 import api from '@/services/api.js';
 import router from '@/router';
+import popup from "@/components/Popup.vue";
 
 export const useAuthStore = defineStore('auth', {
     state: () => ({
@@ -41,15 +42,15 @@ export const useAuthStore = defineStore('auth', {
                     });
                 } else {
                     console.error('No token found in response');
-                    alert('Invalid credentials.');
+                    popup.show('Invalid credentials.');
                 }
             } catch (error) {
                 if (error.response) {
                     console.error('Login Error:', error.response.data);
-                    alert(`Login failed: ${error.response.data.message || 'Invalid credentials.'}`);
+                    popup.show(`Login failed: ${error.response.data.message || 'Invalid credentials.'}`);
                 } else {
                     console.error('Login Error:', error.message);
-                    alert('Login failed: Server error.');
+                    popup.show('Login failed: Server error.');
                 }
                 throw error;
             }

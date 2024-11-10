@@ -15,7 +15,7 @@ const api = axios.create({
 api.interceptors.request.use(
     (config) => {
         const authStore = useAuthStore();
-        const token = authStore.getToken();
+        const token = authStore.token; // Access the token directly
         if (token) {
             config.headers['Authorization'] = `Bearer ${token}`;
         }
@@ -34,7 +34,10 @@ api.interceptors.response.use(
             // Unauthorized, possibly token expired
             const authStore = useAuthStore();
             authStore.logout();
-            alert('Session expired. Please log in again.');
+            // Replace alert with popup for better UX
+            // Assuming you have a PopupStore and Popup component integrated
+            const popup = usePopupStore();
+            popup.show('Session expired. Please log in again.', 'error');
             router.push({ name: 'Login' });
         }
         return Promise.reject(error);

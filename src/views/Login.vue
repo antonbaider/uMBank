@@ -8,28 +8,37 @@
         <div class="form-group">
           <label for="username">Username</label>
           <input
+              :class="{'input-error': touched.username && errors.username}"
               type="text"
               id="username"
               v-model="username"
               placeholder="Enter your username"
+              @input="validateField('username')"
+              @blur="handleBlur('username')"
               required
           />
+          <p class="error-message" v-if="touched.username && errors.username">{{ errors.username }}</p>
         </div>
         <div class="form-group">
           <label for="password">Password</label>
           <input
+              :class="{'input-error': touched.password && errors.password}"
               type="password"
               id="password"
               v-model="password"
               placeholder="Enter your password"
+              @input="validateField('password')"
+              @blur="handleBlur('password')"
               required
           />
+          <p class="error-message" v-if="touched.password && errors.password">{{ errors.password }}</p>
         </div>
         <button type="submit" class="login-button" :disabled="loading">
           <span v-if="loading">Logging in...</span>
           <span v-else>Login</span>
         </button>
       </form>
+      <!-- Popup Component is globally included in App.vue -->
     </div>
   </div>
 </template>
@@ -37,22 +46,92 @@
 <script>
 import { ref } from 'vue';
 import { useAuthStore } from '@/stores/auth.js';
+import { usePopupStore } from '@/stores/popup.js';
 
 export default {
   name: 'Login',
   setup() {
-    const auth = useAuthStore();
+    const auth = useAuthStore(); // Initialize AuthStore
+    const popup = usePopupStore(); // Initialize PopupStore if using popups
     const username = ref('');
     const password = ref('');
     const loading = ref(false);
+    const errors = ref({});
+    const touched = ref({
+      username: false,
+      password: false,
+    });
 
+    // Field Definitions and Validation Patterns
+    const fields = {
+      username: {
+        label: 'Username',
+        type: 'text',
+        placeholder: 'Enter your username',
+        validation: [
+          { rule: (v) => !!v, message: 'Username is required' },
+        ],
+      },
+      password: {
+        label: 'Password',
+        type: 'password',
+        placeholder: 'Enter your password',
+        validation: [
+          { rule: (v) => !!v, message: 'Password is required' },
+        ],
+      },
+    };
+
+    // Validate Field Locally
+    const validateField = (fieldKey) => {
+      const field = fields[fieldKey];
+      if (!field.validation) return true;
+      for (const { rule, message } of field.validation) {
+        const value = fieldKey === 'username' ? username.value : password.value;
+        if (!rule(value)) {
+          errors.value[fieldKey] = message;
+          return false;
+        }
+      }
+      delete errors.value[fieldKey];
+      return true;
+    };
+
+    // Handle Field Blur
+    const handleBlur = (fieldKey) => {
+      touched.value[fieldKey] = true;
+      validateField(fieldKey);
+    };
+
+    // Handle Login
     const handleLogin = async () => {
       loading.value = true;
+      errors.value = {};
+
+      // Mark all fields as touched
+      Object.keys(touched.value).forEach((field) => {
+        touched.value[field] = true;
+        validateField(field);
+      });
+
+      // Check for validation errors
+      if (Object.keys(errors.value).length > 0) {
+        popup.show('Please fill in all required fields.', 'error'); // Show popup
+        loading.value = false;
+        return;
+      }
+
       try {
         await auth.login(username.value, password.value);
-        // Redirect handled in the store
+        // Redirect handled in the AuthStore
       } catch (error) {
-        // Error handling already done in the store
+        if (error.response && error.response.data) {
+          const { message } = error.response.data;
+          popup.show(message || 'Login failed. Please check your credentials.', 'error');
+        } else {
+          console.error('Login error:', error);
+          popup.show('Invalid username or password', 'error');
+        }
       } finally {
         loading.value = false;
       }
@@ -63,6 +142,10 @@ export default {
       password,
       handleLogin,
       loading,
+      errors,
+      touched,
+      validateField,
+      handleBlur,
     };
   },
 };
@@ -132,6 +215,11 @@ export default {
   outline: none;
 }
 
+/* Red border for errors */
+.input-error {
+  border-color: #e74c3c !important;
+}
+
 .login-button {
   width: 100%;
   padding: 12px;
@@ -154,6 +242,12 @@ export default {
 .login-button:disabled {
   background-color: #a5d6a7;
   cursor: not-allowed;
+}
+
+.error-message {
+  color: #e74c3c;
+  font-size: 0.9rem;
+  margin-top: 5px;
 }
 
 /* Responsive Adjustments */

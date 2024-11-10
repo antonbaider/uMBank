@@ -29,6 +29,7 @@
               v-model="receiverCardNumber"
               placeholder="Enter receiver's card number"
               required
+
           />
         </div>
 

@@ -1,138 +1,109 @@
+# MBank Frontend
 
-# 🏦 BankApp Dashboard
+This is the frontend of the MBank application, built with Vue.js. It serves as the user interface for interacting with the backend of MBank, providing features like user authentication, account management, and transaction handling.
 
-Welcome to **BankApp**, a user-friendly banking dashboard to manage transactions, view account balances, track monthly expenses, and visualize recent deposits. This application provides an intuitive interface and interactive charts for a seamless experience.
+## Table of Contents
+- [Requirements](#requirements)
+- [Project Structure](#project-structure)
+- [Setup and Installation](#setup-and-installation)
+- [Environment Variables](#environment-variables)
+- [Running the Project](#running-the-project)
+- [Deployment](#deployment)
+- [Contributing](#contributing)
+- [License](#license)
 
----
+## Requirements
 
-## 📋 Table of Contents
-1. [Features](#features)
-2. [Installation](#installation)
-3. [Usage](#usage)
-4. [API Endpoints](#api-endpoints)
-5. [Project Structure](#project-structure)
-6. [Technologies Used](#technologies-used)
-7. [Contributing](#contributing)
-8. [License](#license)
-9. [Contact](#contact)
+- Node.js >= 14.x
+- npm >= 6.x or Yarn >= 1.x
 
----
+## Project Structure
 
-## ✨ Features
+```
+├── public/                # Static files
+│   ├── favicon.ico
+├── src/
+│   ├── assets/            # Images, stylesheets
+│   ├── components/        # Reusable Vue components
+│   ├── services/          # API services, authentication services
+│   ├── views/             # Application pages/views
+│   ├── router.js          # Vue Router configuration
+│   ├── main.js            # Main JavaScript entry point
+│   ├── App.vue            # Root component
+│   ├── store.js           # Vuex store (if used)
+├── .env.example           # Example environment variables file
+├── Dockerfile             # Docker configuration
+├── README.md              # Documentation
+└── package.json           # Project metadata and dependencies
+```
 
-- **Total Balance Overview** 📊  
-  Check your total balance across multiple currencies.
+## Setup and Installation
 
-- **Monthly Expenses** 💸  
-  Monitor your monthly spending in real-time.
-
-- **Recent Deposits** 💵  
-  Visualize your recent deposits with a dedicated chart.
-
-- **Transaction History** 📜  
-  View all transactions, including descriptions, amounts, and timestamps.
-
-- **Masked Account Numbers** 🔒  
-  Toggle account number visibility for added security.
-
----
-
-## 🚀 Installation
-
-1. **Clone the repository:**
+1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/antonbaider/uMBank.git
+   git clone https://github.com/antonbaider/uBank.git
+   cd mbank-frontend
    ```
 
-2. **Navigate to the project directory:**
-   ```bash
-   cd bankapp
-   ```
-
-3. **Install dependencies:**
+2. **Install Dependencies**:
    ```bash
    npm install
    ```
 
-4. **Run the application:**
-   ```bash
-   npm run serve
-   ```
+## Environment Variables
 
-5. **Access the app:**
-   - Visit [http://localhost:8080](http://localhost:8080) in your browser.
+Create a `.env` file in the root of the project, and add the following variables:
 
----
-
-## 🛠️ Usage
-
-- **Login/Register:** Create an account or log in to access the dashboard.
-- **View Dashboard:** Check total balances, expenses, and deposits.
-- **Account Management:** View accounts with masked card numbers. Click on a number to reveal it.
-- **Transaction History:** See a detailed breakdown of your recent transactions, including expenses and deposits.
-
----
-
-## 🔗 API Endpoints
-
-| Endpoint                            | Method | Description                        |
-|-------------------------------------|--------|------------------------------------|
-| `/api/auth/register`                | POST   | Register a new user                |
-| `/api/auth/login`                   | POST   | Log in to the application          |
-| `/api/accounts`                     | GET    | Retrieve user account details      |
-| `/api/transactions`                 | GET    | Get transaction history            |
-| `/api/transactions/transferByCard`  | POST   | Transfer funds by card             |
-
----
-
-## 📁 Project Structure
-
-```
-├── src
-│   ├── assets          # Static files (images, icons)
-│   ├── components      # Reusable Vue components
-│   ├── views           # Application pages (Dashboard, Accounts)
-│   ├── services        # API calls and services
-│   ├── store           # Vuex store for state management
-│   └── App.vue         # Main application component
-├── public              # Public assets (favicon, index.html)
-└── README.md           # Documentation file
+```plaintext
+VITE_API_URL=http://localhost:8080   # Backend API URL
 ```
 
----
+For production, replace `localhost` with the actual backend URL.
 
-## 🧰 Technologies Used
+## Running the Project
 
-- **Frontend Framework:** Vue.js 🌐
-- **State Management:** Vuex 🗄️
-- **API Communication:** Axios 📡
-- **UI Components:** Chart.js 📈, FontAwesome Icons 🎨
+### Development Mode
 
----
+To run the frontend in development mode with hot reloading, use:
 
-## 🤝 Contributing
+```bash
+npm run dev
+```
 
-Contributions are welcome! Please follow these steps:
+The app will be available at `http://localhost:3000`.
 
-1. **Fork the repository** 🍴
-2. **Create a new branch** 🔀
+### Production Mode
+
+To build the frontend for production:
+
+```bash
+npm run build
+```
+
+This will generate optimized files in the `dist` directory.
+
+### Docker
+
+To run the frontend in a Docker container:
+
+1. **Build the Docker image**:
    ```bash
-   git checkout -b feature/your-feature
+   docker build -t mbank-frontend .
    ```
-3. **Make your changes** 💡
-4. **Commit and push your code** 🚀
+
+2. **Run the Docker container**:
    ```bash
-   git commit -m "Add feature"
-   git push origin feature/your-feature
+   docker run -p 80:80 mbank-frontend
    ```
-5. **Create a pull request** 📝
 
----
+## Deployment
 
-## 📜 License
+To deploy, serve the contents of the `dist` directory on your preferred static file server or platform (e.g., Vercel, Netlify).
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## Contributing
 
----
+Please ensure all pull requests pass linting and formatting checks, and provide a descriptive commit message.
 
-> Built with ❤️ by Anton
+## License
+
+This project is licensed under the MIT License. See `LICENSE` for details.
