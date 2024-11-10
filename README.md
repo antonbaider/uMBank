@@ -7,6 +7,20 @@ This is the frontend of the MBank application, built with Vue.js. It provides th
 https://github.com/antonbaider/MBankApp.git
 ---
 
+## Features
+- **User Authentication**: Secure login and registration for users.
+- **Account Management**: Open, update, view, and close accounts.
+- **Fund Transfers**: Transfer funds between accounts or via card numbers.
+- **User Profile Management**: View and update profile information.
+
+---
+
+## Technologies Used
+- **Vue.js** for the frontend
+- **Axios** for making API requests
+- **Postman Collection** for API testing
+- **Docker** for containerized deployment
+
 ## 📋 Table of Contents
 
 - [Requirements](#requirements)
@@ -73,6 +87,33 @@ VITE_API_URL=http://localhost:8080   # Backend API URL
 ```
 
 For production, replace `localhost` with the actual backend URL.
+
+---
+
+## Endpoint Descriptions
+
+Below is a brief description of available endpoints in the API:
+
+### Authentication
+- **POST /auth/register** - Register a new user.
+- **POST /auth/login** - Log in an existing user.
+
+### User Profile
+- **GET /users/profile** - Get user profile details.
+- **PUT /users/update** - Update user profile information.
+
+### Accounts
+- **POST /accounts** - Open a new account with specified currency.
+- **GET /accounts** - Retrieve all accounts for the logged-in user.
+- **DELETE /accounts/close** - Close an existing account by card number.
+
+### Transactions
+- **POST /transactions/transfer** - Transfer funds between accounts using account IDs.
+- **POST /transactions/transferByCard** - Transfer funds between accounts using card numbers.
+- **GET /transactions/history** - Get transaction history for the logged-in user.
+
+### Admin
+- **POST /admin/adminTransfer** - Perform admin-level fund transfers.
 
 ---
 
