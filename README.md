@@ -1,5 +1,5 @@
 
-# 💻 MBank Frontend
+# 💻 MBank Frontend [![Node.js CI](https://github.com/antonbaider/uMBank/actions/workflows/node.js.yml/badge.svg?branch=main)](https://github.com/antonbaider/uMBank/actions/workflows/node.js.yml)
 
 This is the frontend of the MBank application, built with Vue.js. It provides the user interface for interacting with the backend of MBank, enabling features such as user authentication, account management, and transaction handling.
 
