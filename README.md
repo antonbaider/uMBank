@@ -52,7 +52,7 @@ This is the frontend of the MBank application, built with Vue.js. It provides th
 1. **Clone the Repository**:
    ```bash
    git clone https://github.com/antonbaider/uMBank.git
-   cd mbank-frontend
+   cd uMBank
    ```
 
 2. **Install Dependencies**:
