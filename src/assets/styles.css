@@ -1,0 +1,45 @@
+/* src/assets/styles.css */
+
+:root {
+    /* Font Families */
+    --font-family-base: 'Roboto', sans-serif;
+
+    /* Font Sizes */
+    --font-size-base: 16px;
+    --font-size-sm: 0.875rem;    /* 14px */
+    --font-size-md: 1rem;        /* 16px */
+    --font-size-lg: 1.25rem;     /* 20px */
+    --font-size-xl: 1.5rem;      /* 24px */
+    --font-size-xxl: 2rem;       /* 32px */
+
+    /* Font Weights */
+    --font-weight-normal: 400;
+    --font-weight-bold: 700;
+
+    /* Text Colors */
+    --text-color-primary: #1A202C;    /* Very dark gray for primary text */
+    --text-color-secondary: #4A90E2;  /* Blue for secondary text */
+    --text-color-muted: #777777;      /* Light gray for muted text */
+    --text-color-inverted: #FFFFFF;   /* White for inverted text */
+
+    /* Transition Speed */
+    --transition-speed: 0.3s;
+
+    /* Background Colors */
+    --background-color: #F5F5F5;      /* Light gray background */
+
+    /* Gradient Colors */
+    --gradient-start: #ffffff; /* Bright blue */
+    --gradient-end: #ffffff;   /* Slightly darker blue */
+}
+
+/* Dark Mode Variables */
+.dark-mode {
+    --text-color-primary: #F9FAFB;
+    --text-color-secondary: #10B981;
+    --text-color-muted: #A0AEC0;
+    --text-color-inverted: #1A202C;
+
+    --gradient-start: #2b6cb0; /* Dark blue for dark mode */
+    --gradient-end: #2c5282;
+}
