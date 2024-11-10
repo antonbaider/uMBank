@@ -1,4 +1,3 @@
-
 # MBank Frontend
 
 This is the frontend of the MBank application, built with Vue.js. It serves as the user interface for interacting with the backend of MBank, providing features like user authentication, account management, and transaction handling.
@@ -42,7 +41,7 @@ This is the frontend of the MBank application, built with Vue.js. It serves as t
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/your-username/mbank-frontend.git
+   git clone https://github.com/antonbaider/uBank.git
    cd mbank-frontend
    ```
 
