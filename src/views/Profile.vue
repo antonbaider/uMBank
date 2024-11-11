@@ -3,9 +3,20 @@
   <div class="profile-page">
     <div class="profile-card">
       <div class="profile-header">
-        <h2 class="username">{{ profile.username }}</h2>
+      <h2 class="username">
+        <RoleAvatar :role="profile.role" :username="profile.username" />
+        <h1 class="username">{{ profile.username }}</h1>
+      </h2>
       </div>
       <form @submit.prevent="updateProfile" class="profile-form">
+
+        <!-- Loading Overlay -->
+        <div v-if="loading" class="loading-overlay">
+          <div class="spinner"></div>
+          <p>Loading...</p>
+        </div>
+
+
         <div
             class="form-group"
             v-for="(fieldInfo, field) in profileFields"
@@ -98,10 +109,11 @@
 import { ref, reactive, onMounted, computed } from 'vue';
 import api from '@/services/api';
 import Popup from '@/components/Popup.vue';
+import RoleAvatar from '@/components/RoleAvatar.vue';
 
 export default {
   name: 'Profile',
-  components: { Popup },
+  components: {RoleAvatar, Popup },
   setup() {
     const profile = ref({
       username: '',
@@ -110,6 +122,7 @@ export default {
       email: '',
       phone: '',
       password: '',
+      role: '',
     });
 
     const originalProfile = ref({});
@@ -289,6 +302,13 @@ export default {
       showPopup.value = false;
     };
 
+    // Computed property to get user label
+    const userLabel = computed(() => {
+      if (profile.value.role === 'ROLE_ADMIN') return 'Admin';
+      if (profile.value.role === 'ROLE_USER') return 'User';
+      return 'Guest';
+    });
+
     return {
       profile,
       profileFields,
@@ -305,6 +325,7 @@ export default {
       popupMessage,
       popupType,
       errors,
+      userLabel,
     };
   },
 };
@@ -445,6 +466,56 @@ export default {
   background-color: #f1f1f1;
 }
 
+@media (max-width: 576px) {
+  .profile-card {
+    padding: 20px;
+  }
+
+  .username {
+    font-size: 1.5rem;
+  }
+
+  .input-group input {
+    padding: 10px 40px 10px 12px;
+  }
+
+  .icon-button {
+    font-size: 1rem;
+  }
+
+  .primary-button,
+  .secondary-button {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+}.loading-overlay {
+   position: fixed;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+   z-index: 9999; /* Ensure it overlays other elements */
+ }
+.spinner {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  border: 3px solid rgba(0, 0, 0, 0.2);
+  border-radius: 50%;
+  border-top-color: #e74c3c; /* Red color */
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+/* Responsive Design */
 @media (max-width: 576px) {
   .profile-card {
     padding: 20px;

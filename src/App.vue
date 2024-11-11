@@ -21,7 +21,8 @@
       <div class="auth-section">
         <div v-if="isAuthenticated" class="user-info" @click="toggleDropdown">
           <span class="welcome-text">Hi, {{ userFullName }}!</span>
-          <div v-if="dropdownVisible" class="dropdown-menu">
+           <div v-if="dropdownVisible" class="dropdown-menu">
+             <router-link v-if="isAdmin" to="/admin" class="dropdown-item">Admin Panel</router-link>
             <router-link to="/profile" class="dropdown-item">Profile</router-link>
             <button @click="handleLogout" class="dropdown-item logout-button">Logout</button>
           </div>
@@ -50,9 +51,15 @@ import { useAuthStore } from '@/stores/auth';
 import { useRouter } from 'vue-router';
 import api from '@/services/api';
 import Popup from '@/components/Popup.vue';
+import profile from "@/views/Profile.vue";
 
 export default {
   name: 'App',
+  computed: {
+    profile() {
+      return profile
+    }
+  },
   components: { Popup },
   setup() {
     const dropdownVisible = ref(false);
@@ -98,10 +105,10 @@ export default {
     const userFullName = computed(() => {
       const firstName = profile.value.firstName || '';
       const lastName = profile.value.lastName || '';
-      const fullName = `${firstName} ${lastName}`.trim();
-      return fullName || profile.value.username || 'User';
+      return `${firstName} ${lastName}`.trim() || profile.value.username || 'User';
     });
 
+    const isAdmin = computed(() => authStore.userRole === 'ROLE_ADMIN'); // New computed property for clarity
     // Hamburger menu state
     const isMenuActive = ref(false);
 
@@ -122,6 +129,7 @@ export default {
     return {
       isAuthenticated,
       userFullName,
+      isAdmin,
       handleLogout,
       isMenuActive,
       toggleDropdown,
@@ -134,8 +142,19 @@ export default {
 </script>
 
 <style>
+
 /* Import Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+nav {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+a {
+  text-decoration: none;
+  color: #007bff;
+}
 .auth-section {
   display: flex;
   align-items: center;
