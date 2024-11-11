@@ -2,13 +2,18 @@
 <template>
   <div class="login-page">
     <div class="login-container">
-      <img src="@/assets/logo.svg" alt="BankApp Logo" class="login-logo" />
+      <img
+          src="@/assets/logo.svg"
+          alt="BankApp Logo"
+          class="login-logo"
+          :class="{ spinning: isSpinning }"
+      />
       <h2>Login to Your Account</h2>
       <form @submit.prevent="handleLogin">
         <div class="form-group">
           <label for="username">Username</label>
           <input
-              :class="{'input-error': touched.username && errors.username}"
+              :class="{ 'input-error': touched.username && errors.username }"
               type="text"
               id="username"
               v-model="username"
@@ -22,7 +27,7 @@
         <div class="form-group">
           <label for="password">Password</label>
           <input
-              :class="{'input-error': touched.password && errors.password}"
+              :class="{ 'input-error': touched.password && errors.password }"
               type="password"
               id="password"
               v-model="password"
@@ -38,121 +43,113 @@
           <span v-else>Login</span>
         </button>
       </form>
-      <!-- Popup Component is globally included in App.vue -->
     </div>
   </div>
 </template>
 
 <script>
-import { ref } from 'vue';
-import { useAuthStore } from '@/stores/auth.js';
-import { usePopupStore } from '@/stores/popup.js';
+import { ref, reactive } from 'vue';
+import { useAuthStore } from '@/stores/auth';
+import { useRouter } from 'vue-router';
+import { usePopupStore } from '@/stores/popup';
 
 export default {
-  name: 'Login',
   setup() {
-    const auth = useAuthStore(); // Initialize AuthStore
-    const popup = usePopupStore(); // Initialize PopupStore if using popups
     const username = ref('');
     const password = ref('');
     const loading = ref(false);
-    const errors = ref({});
-    const touched = ref({
+    const errors = reactive({});
+    const touched = reactive({
       username: false,
       password: false,
     });
 
-    // Field Definitions and Validation Patterns
+    const isSpinning = ref(false);
+
+    const authStore = useAuthStore();
+    const popupStore = usePopupStore();
+    const router = useRouter();
+
     const fields = {
       username: {
         label: 'Username',
-        type: 'text',
-        placeholder: 'Enter your username',
-        validation: [
-          { rule: (v) => !!v, message: 'Username is required' },
-        ],
+        validation: [{ rule: (v) => !!v, message: 'Username is required' }],
       },
       password: {
         label: 'Password',
-        type: 'password',
-        placeholder: 'Enter your password',
-        validation: [
-          { rule: (v) => !!v, message: 'Password is required' },
-        ],
+        validation: [{ rule: (v) => !!v, message: 'Password is required' }],
       },
     };
 
-    // Validate Field Locally
     const validateField = (fieldKey) => {
       const field = fields[fieldKey];
-      if (!field.validation) return true;
+      const value = fieldKey === 'username' ? username.value : password.value;
       for (const { rule, message } of field.validation) {
-        const value = fieldKey === 'username' ? username.value : password.value;
         if (!rule(value)) {
-          errors.value[fieldKey] = message;
+          errors[fieldKey] = message;
           return false;
         }
       }
-      delete errors.value[fieldKey];
+      delete errors[fieldKey];
       return true;
     };
 
-    // Handle Field Blur
     const handleBlur = (fieldKey) => {
-      touched.value[fieldKey] = true;
+      touched[fieldKey] = true;
       validateField(fieldKey);
     };
 
-    // Handle Login
     const handleLogin = async () => {
       loading.value = true;
-      errors.value = {};
+      isSpinning.value = true; // Start logo spinning when login is attempted
 
-      // Mark all fields as touched
-      Object.keys(touched.value).forEach((field) => {
-        touched.value[field] = true;
-        validateField(field);
-      });
+      // Validate all fields
+      let isValid = true;
+      for (const fieldKey in fields) {
+        touched[fieldKey] = true;
+        if (!validateField(fieldKey)) {
+          isValid = false;
+        }
+      }
 
-      // Check for validation errors
-      if (Object.keys(errors.value).length > 0) {
-        popup.show('Please fill in all required fields.', 'error'); // Show popup
+      if (!isValid) {
         loading.value = false;
+        isSpinning.value = false; // Stop spinning if validation fails
         return;
       }
 
       try {
-        await auth.login(username.value, password.value);
-        // Redirect handled in the AuthStore
+        await authStore.login(username.value, password.value);
+        const redirect = router.currentRoute.value.query.redirect || '/dashboard';
+        router.push(redirect);
       } catch (error) {
-        if (error.response && error.response.data) {
-          const { message } = error.response.data;
-          popup.show(message || 'Login failed. Please check your credentials.', 'error');
-        } else {
-          console.error('Login error:', error);
-          popup.show('Invalid username or password', 'error');
-        }
+        // Use the popup to display the error message
+        popupStore.show('Invalid username or password', 'error');
       } finally {
         loading.value = false;
+        // Stop spinning after the animation completes
+        setTimeout(() => {
+          isSpinning.value = false;
+        }, 1500); // Duration of the spin animation in milliseconds
       }
     };
 
     return {
       username,
       password,
-      handleLogin,
       loading,
       errors,
       touched,
       validateField,
       handleBlur,
+      handleLogin,
+      isSpinning,
     };
   },
 };
 </script>
 
 <style scoped>
-/* Global Box Sizing */
 *,
 *::before,
 *::after {
@@ -163,59 +160,79 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: calc(100vh - var(--navbar-height, 60px) - var(--footer-height, 40px));
-  padding: 20px; /* Prevent overflow on small screens */
+  min-height: 100vh;
+  padding: 20px;
+  /* You can customize the background if needed */
 }
 
 .login-container {
-  background-color: var(--secondary-color, #f9f9f9);
+  background-color: #ffffff;
   padding: 40px 30px;
-  border-radius: 20px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  border-radius: 15px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
   width: 400px;
-  max-width: 90%;
   text-align: center;
-  transition: background-color var(--transition-speed, 0.3s) ease,
-  color var(--transition-speed, 0.3s) ease;
+  transition: transform 0.3s ease;
 }
 
 .login-logo {
   height: 50px;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
+  cursor: pointer;
 }
 
-.login-container h2 {
-  margin-bottom: 30px;
-  color: var(--text-color, #333333);
+.login-logo:hover:not(.spinning) {
+  animation: spinAnimationHover 1s forwards;
+}
+
+@keyframes spinAnimationHover {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.login-logo.spinning {
+  animation: spinAnimation 1s forwards;
+}
+
+@keyframes spinAnimation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+h2 {
+  margin-bottom: 20px;
+  color: #4a90e2;
+  font-weight: bold;
 }
 
 .form-group {
-  text-align: left;
   margin-bottom: 20px;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: 600;
-  color: var(--text-color, #333333);
+  text-align: left;
 }
 
 .form-group input {
   width: 100%;
-  padding: 12px 15px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
   font-size: 1rem;
-  transition: border-color var(--transition-speed, 0.3s) ease;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .form-group input:focus {
-  border-color: var(--primary-color, #4caf50);
+  border-color: #4a90e2;
+  box-shadow: 0 0 10px rgba(74, 144, 226, 0.3);
   outline: none;
 }
 
-/* Red border for errors */
 .input-error {
   border-color: #e74c3c !important;
 }
@@ -223,24 +240,25 @@ export default {
 .login-button {
   width: 100%;
   padding: 12px;
-  background-color: var(--primary-color, #4caf50);
-  color: var(--secondary-color, #f9f9f9);
+  background-color: #4a90e2;
+  color: #fff;
   border: none;
   border-radius: 25px;
   font-size: 1.1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color var(--transition-speed, 0.3s) ease,
-  transform var(--transition-speed, 0.3s) ease;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 10px rgba(74, 144, 226, 0.3);
 }
 
 .login-button:hover {
-  background-color: #38c6a1; /* Slightly darker primary color */
+  background-color: #357abd;
+  box-shadow: 0 6px 15px rgba(74, 144, 226, 0.4);
   transform: translateY(-2px);
 }
 
 .login-button:disabled {
-  background-color: #a5d6a7;
+  background-color: #a5c8e7;
   cursor: not-allowed;
 }
 
@@ -248,32 +266,5 @@ export default {
   color: #e74c3c;
   font-size: 0.9rem;
   margin-top: 5px;
-}
-
-/* Responsive Adjustments */
-@media (max-width: 480px) {
-  .login-container {
-    padding: 30px 20px;
-  }
-
-  .login-logo {
-    height: 40px;
-    margin-bottom: 15px;
-  }
-
-  .login-container h2 {
-    margin-bottom: 20px;
-    font-size: 1.5rem;
-  }
-
-  .form-group input {
-    padding: 10px 12px;
-    font-size: 0.9rem;
-  }
-
-  .login-button {
-    padding: 10px;
-    font-size: 1rem;
-  }
 }
 </style>

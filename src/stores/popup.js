@@ -5,21 +5,22 @@ import { ref } from 'vue';
 export const usePopupStore = defineStore('popup', () => {
     const isVisible = ref(false);
     const message = ref('');
-    const type = ref(''); // 'success' or 'error'
+    const type = ref(''); // e.g., 'success', 'error'
 
-    const show = (msg, popupType = 'success') => {
+    function show(msg, msgType) {
         message.value = msg;
-        type.value = popupType;
+        type.value = msgType;
         isVisible.value = true;
-        // Automatically hide after 3 seconds
-        setTimeout(() => {
-            isVisible.value = false;
-        }, 3000);
-    };
 
-    const hide = () => {
+        // Optionally hide the popup after a delay
+        setTimeout(() => {
+            hide();
+        }, 5000); // Hide after 5 seconds
+    }
+
+    function hide() {
         isVisible.value = false;
-    };
+    }
 
     return {
         isVisible,

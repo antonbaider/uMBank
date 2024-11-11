@@ -305,7 +305,7 @@ export default {
   top: 15px;
   width: 30px;
   height: 30px;
-  line-height: 30px;
+  line-height: 15px;
   text-align: center;
   border-radius: 50%;
   transition: color 0.2s ease, transform 0.2s ease;
@@ -329,84 +329,6 @@ export default {
   color: var(--text-color);
   font-size: 1.2rem;
 }
-
-.add-account {
-  text-align: center;
-  margin-top: 30px;
-  padding: 20px;
-  background-color: var(--secondary-color);
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  max-width: 400px;
-  margin: 30px auto;
-}
-
-.add-account h3 {
-  color: var(--primary-color);
-  font-size: 1.5rem;
-  margin-bottom: 10px;
-}
-
-.account-form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-}
-
-.currency-select {
-  padding: 8px 12px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  width: 100%;
-  font-size: 1rem;
-}
-
-.open-account-button {
-  background-color: var(--primary-color);
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 15px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.open-account-button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
-.open-account-button:hover:not(:disabled) {
-  background-color: #1e90ff;
-}
-
-@media (max-width: 768px) {
-  .accounts-list {
-    align-items: center;
-  }
-
-  .account-card {
-    width: 90%;
-    max-width: 400px;
-  }
-
-  .add-account {
-    width: 90%;
-  }
-}.accounts-page {
-   padding: 20px;
-   max-width: 1200px;
-   margin: 0 auto;
- }
-
-.accounts-list {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
 .add-account {
   position: relative;
   text-align: center;
@@ -416,8 +338,8 @@ export default {
   overflow: hidden;
   background: linear-gradient(to right, #6a11cb, #2575fc);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-  width: 90%;
-  max-width: 550px;
+  width: 100%;
+  max-width: 310px;
   margin: 30px auto;
   color: #fff;
 }
@@ -434,8 +356,8 @@ export default {
 
 .wave {
   position: absolute;
-  width: 200%;
-  height: 200%;
+  width: 150%;
+  height: 150%;
   background: rgba(255, 255, 255, 0.3);
   opacity: 0.5;
   border-radius: 45%;
@@ -443,14 +365,14 @@ export default {
 }
 
 .wave1 {
-  top: -50%;
-  left: -50%;
+  top: -40%;
+  left: -40%;
   animation-delay: 0s;
 }
 
 .wave2 {
-  top: -55%;
-  left: -55%;
+  top: -15%;
+  left: -15%;
   animation-delay: 2s;
 }
 
@@ -469,8 +391,8 @@ export default {
 .add-account h3 {
   z-index: 1;
   position: relative;
-  font-size: 1.8rem;
-  color: #aceafa;
+  font-size: 1.2rem;
+  color: #ffffff;
   margin-bottom: 15px;
 }
 
@@ -490,7 +412,7 @@ export default {
   border-radius: 30px;
   font-size: 1rem;
   font-weight: 600;
-  color: #a7d6ec;
+  color: #6419c5;
   border: none;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   outline: none;
@@ -519,7 +441,7 @@ export default {
 }
 
 .open-account-button:disabled {
-  background-color: #ccc;
+  background-color: rgba(255, 255, 255, 0.3);
   cursor: not-allowed;
 }
 

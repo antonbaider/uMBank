@@ -2,29 +2,29 @@
   <div class="dashboard">
     <section class="overview">
       <div class="overview-card">
-        <i class="fas fa-wallet fa-2x"></i>
+        <i class="fas fa-wallet fa-2x feature-icon"></i>
         <h3>Total Balance</h3>
         <div class="balance-list">
           <div v-for="(amount, currency) in totalBalanceByCurrency" :key="currency">
-            <p>{{ currency }}: {{ formatCurrency(amount, currency) }}</p>
+            <p>{{ formatCurrency(amount, currency) }}</p>
           </div>
         </div>
       </div>
       <div class="overview-card">
-        <i class="fas fa-chart-line fa-2x"></i>
+        <i class="fas fa-chart-line fa-2x feature-icon"></i>
         <h3>Monthly Expenses</h3>
         <div class="balance-list">
           <div v-for="(amount, currency) in monthlyExpensesByCurrency" :key="currency">
-            <p>{{ currency }}: {{ formatCurrency(Math.abs(amount), currency) }}</p>
+            <p>{{ formatCurrency(Math.abs(amount), currency) }}</p>
           </div>
         </div>
       </div>
       <div class="overview-card">
-        <i class="fas fa-arrow-up fa-2x"></i>
+        <i class="fas fa-arrow-up fa-2x feature-icon"></i>
         <h3>Recent Deposits</h3>
         <div class="balance-list">
           <div v-for="(amount, currency) in recentDepositsByCurrency" :key="currency">
-            <p>{{ currency }}: {{ formatCurrency(amount, currency) }}</p>
+            <p>{{ formatCurrency(amount, currency) }}</p>
           </div>
         </div>
       </div>
@@ -84,6 +84,7 @@ import {computed, onMounted, ref} from 'vue';
 import api from '@/services/api.js';
 import Chart from 'chart.js/auto';
 import LineChart from "@/components/LineChart.vue";
+import { useAuthStore } from '@/stores/auth';
 
 export default {
   name: 'Dashboard',
@@ -92,6 +93,10 @@ export default {
     const transactions = ref([]);
     const accounts = ref([]);
     const loading = ref(true);
+    const authStore = useAuthStore();
+    const userName = computed(() => authStore.user?.username || 'User');
+
+
 
     const fetchTransactions = async () => {
       try {
@@ -231,6 +236,7 @@ export default {
     });
 
     return {
+      userName,
       transactions,
       loading,
       totalBalanceByCurrency,
@@ -262,7 +268,7 @@ export default {
 
 .overview-card {
   background-color: var(--secondary-color);
-  color: var(--text-color-primary);
+  color: #000000;
   border-radius: 15px;
   padding: 20px;
   width: 250px;
@@ -306,5 +312,9 @@ th, td {
   text-align: center;
   padding: 20px;
   color: var(--text-color-primary);
+}
+.feature-icon {
+  color: #4a8bd9;
+  margin-bottom: 15px;
 }
 </style>
