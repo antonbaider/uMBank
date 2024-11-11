@@ -130,7 +130,7 @@ export default {
     };
 
     const isIncomingTransaction = (transaction) => {
-      return accounts.value.some(account => account.cardNumber === transaction.receiverAccountId);
+      return accounts.value.some(account => account.cardNumber === transaction.receiverCardNumber);
     };
 
     const displayAmount = (transaction) => {
@@ -139,8 +139,8 @@ export default {
 
     // Update description to display "Me" for own card numbers, otherwise show the card number
     const formatDescription = (transaction) => {
-      const sender = isOutgoingTransaction(transaction) ? 'Me' : transaction.senderCardNumber || 'N/A';
-      const receiver = isIncomingTransaction(transaction) ? 'Me' : transaction.receiverAccountId || 'N/A';
+      const sender = isOutgoingTransaction(transaction) ? ('My ' + transaction.senderCardNumber) : transaction.senderCardNumber || 'N/A';
+      const receiver = isIncomingTransaction(transaction) ? ('My ' + transaction.receiverCardNumber) : transaction.receiverCardNumber || 'N/A';
       return `From ${sender} to ${receiver}`;
     };
 
