@@ -8,11 +8,12 @@ import './assets/styles.css'; // Import global styles
 import '@fortawesome/fontawesome-free/css/all.css';
 import '@fortawesome/fontawesome-free/js/all.js';
 import {useAuthStore} from "@/stores/auth.js";
+import VueTheMask from 'vue-the-mask';
 
 // Create and export the pinia instance
 
 const app = createApp(App);
-
+app.use(VueTheMask);
 app.use(pinia);
 app.use(router);
 

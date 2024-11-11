@@ -28,8 +28,9 @@
               type="text"
               id="receiverCardNumber"
               v-model="receiverCardNumber"
-              placeholder="Enter receiver's card number"
+              placeholder="XXXX-XXXX-XXXX"
               required
+              v-mask="'################'"
           />
         </div>
 
@@ -71,7 +72,7 @@
         <ul>
           <li><strong>Transaction ID:</strong> {{ transaction.transactionId }}</li>
           <li><strong>Sender Card:</strong> {{ transaction.senderCardNumber }}</li>
-          <li><strong>Receiver Card:</strong> {{ transaction.receiverCardNumber }}</li>
+          <li><strong>Receiver Card:</strong> {{ transaction.receiverAccountId }}</li>
           <li><strong>Amount:</strong> {{ transaction.amount }} {{ transaction.currency }}</li>
           <li><strong>Balance After:</strong> {{ transaction.balanceAfter }}</li>
           <li><strong>Timestamp:</strong> {{ formatDate(transaction.timestamp) }}</li>
