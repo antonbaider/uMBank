@@ -1,36 +1,27 @@
-<!-- src/views/Payment.vue -->
 <template>
   <div class="payment-page">
     <div class="payment-card">
-      <h2 class="payment-title">Make a Payment</h2>
+      <h2 class="payment-title">Service Payments</h2>
       <form @submit.prevent="handlePayment">
         <div class="form-group">
-          <label for="senderCardNumber">Sender Card Number</label>
-          <select
-              id="senderCardNumber"
-              v-model="selectedSenderCard"
+          <label for="senderAccountId">Sender Account ID</label>
+          <input type="text"
+              id="senderAccountId"
+              v-model="senderAccountId"
+                 placeholder="Enter sender's id account"
               required
-          >
-            <option value="" disabled>Select a card</option>
-            <option
-                v-for="card in availableCards"
-                :key="card.cardNumber"
-                :value="card.cardNumber"
-            >
-              {{ card.cardNumber }} - {{ card.balance }} {{ card.currency }}
-            </option>
-          </select>
+          />
+
         </div>
 
         <div class="form-group">
-          <label for="receiverCardNumber">Receiver Card Number</label>
+          <label for="receiverAccountId">Receiver Account ID</label>
           <input
               type="text"
-              id="receiverCardNumber"
-              v-model="receiverCardNumber"
-              placeholder="XXXX-XXXX-XXXX"
+              id="receiverAccountId"
+              v-model="receiverAccountId"
+              placeholder="Enter receiver's id account"
               required
-              v-mask="'################'"
           />
         </div>
 
@@ -71,8 +62,10 @@
         <h3>Transaction Details</h3>
         <ul>
           <li><strong>Transaction ID:</strong> {{ transaction.transactionId }}</li>
+          <li><strong>Sender Account ID:</strong> {{ transaction.senderAccountId }}</li>
           <li><strong>Sender Card:</strong> {{ transaction.senderCardNumber }}</li>
-          <li><strong>Receiver Card:</strong> {{ transaction.receiverAccountId }}</li>
+          <li><strong>Receiver Account ID::</strong> {{ transaction.receiverAccountId }}</li>
+          <li><strong>Receiver Card:</strong> {{ transaction.receiverCardNumber }}</li>
           <li><strong>Amount:</strong> {{ transaction.amount }} {{ transaction.currency }}</li>
           <li><strong>Balance After:</strong> {{ transaction.balanceAfter }}</li>
           <li><strong>Timestamp:</strong> {{ formatDate(transaction.timestamp) }}</li>
@@ -87,30 +80,17 @@ import { ref, computed, onMounted } from 'vue';
 import api from '@/services/api';
 
 export default {
-  name: 'Payment',
+  name: 'AdminPanel',
   setup() {
-    const availableCards = ref([]);
-    const selectedSenderCard = ref('');
+    const senderAccountId = ref('');
+    const receiverAccountId = ref('');
+    const senderCardNumber = ref('');
     const receiverCardNumber = ref('');
     const amount = ref('');
     const loading = ref(false);
     const successMessage = ref('');
     const errorMessage = ref('');
     const transaction = ref(null);
-
-    // Fetch available cards for dropdown
-    const fetchAvailableCards = async () => {
-      try {
-        const response = await api.get('/api/accounts');
-        if (response.data && response.data.data) {
-          availableCards.value = response.data.data;
-        } else {
-          console.error('No cards data found.');
-        }
-      } catch (error) {
-        console.error('Error fetching accounts:', error);
-      }
-    };
 
     // Handle payment submission
     const handlePayment = async () => {
@@ -120,9 +100,9 @@ export default {
       transaction.value = null;
 
       try {
-        const response = await api.post('/api/transactions/transferByCard', {
-          senderCardNumber: selectedSenderCard.value,
-          receiverCardNumber: receiverCardNumber.value,
+        const response = await api.post('/api/admin/adminTransfer', {
+          senderAccountId: senderAccountId.value,
+          receiverAccountId: receiverAccountId.value,
           amount: parseFloat(amount.value),
         });
 
@@ -143,8 +123,8 @@ export default {
     // Check if form fields are valid to enable the submit button
     const isFormValid = computed(() => {
       return (
-          selectedSenderCard.value &&
-          receiverCardNumber.value &&
+          senderAccountId.value &&
+          receiverAccountId.value &&
           amount.value > 0
       );
     });
@@ -153,11 +133,10 @@ export default {
       return new Date(timestamp).toLocaleString();
     };
 
-    onMounted(fetchAvailableCards);
-
     return {
-      availableCards,
-      selectedSenderCard,
+      senderAccountId,
+      receiverAccountId,
+      senderCardNumber,
       receiverCardNumber,
       amount,
       loading,
