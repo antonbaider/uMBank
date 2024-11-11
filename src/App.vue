@@ -1,35 +1,39 @@
 <!-- src/App.vue -->
 <template>
   <div id="app">
-
     <!-- Navigation Bar -->
     <header class="navbar">
       <div class="logo-section">
         <img src="@/assets/logo.svg" alt="BankApp Logo" class="logo" />
-        <router-link to="/" class="nav-link">BankApp</router-link>
+        <router-link to="/" class="nav-link">MBankApp</router-link>
       </div>
       <button class="hamburger" @click="toggleMenu" aria-label="Toggle Navigation">
         <i :class="menuIcon"></i>
       </button>
-      <nav :class="['nav-links', { 'active': isMenuActive }]">
+      <nav :class="['nav-links', { active: isMenuActive }]">
         <router-link to="/" class="nav-link">Home</router-link>
-        <router-link v-if="!isLoggedIn" to="/register" class="nav-link">Register</router-link>
-        <router-link v-if="isLoggedIn" to="/dashboard" class="nav-link">Dashboard</router-link>
-        <router-link v-if="isLoggedIn" to="/accounts" class="nav-link">Accounts</router-link>
-        <router-link v-if="isLoggedIn" to="/payment" class="nav-link">Payment</router-link>
-        <router-link v-if="isLoggedIn" to="/support" class="nav-link">Support</router-link>
+        <router-link v-if="!isAuthenticated" to="/register" class="nav-link">Register</router-link>
+        <router-link v-if="isAuthenticated" to="/dashboard" class="nav-link">Dashboard</router-link>
+        <router-link v-if="isAuthenticated" to="/accounts" class="nav-link">Accounts</router-link>
+        <router-link v-if="isAuthenticated" to="/payment" class="nav-link">Payment</router-link>
+        <router-link v-if="isAuthenticated" to="/support" class="nav-link">Support</router-link>
       </nav>
       <div class="auth-section">
-        <span v-if="isLoggedIn" class="user-info">
-        <router-link to="/profile" class="welcome-text">Hi, {{ userName }}!</router-link>
-          <button @click="handleLogout" class="logout-button">Logout</button>
-        </span>
+        <div v-if="isAuthenticated" class="user-info" @click="toggleDropdown">
+          <span class="welcome-text">Hi, {{ userFullName }}!</span>
+          <div v-if="dropdownVisible" class="dropdown-menu">
+            <router-link to="/profile" class="dropdown-item">Profile</router-link>
+            <button @click="handleLogout" class="dropdown-item logout-button">Logout</button>
+          </div>
+        </div>
         <router-link v-else to="/login" class="login-button">Login</router-link>
       </div>
     </header>
+
     <!-- Main Content -->
     <main class="main-content">
-      <router-view/>
+      <router-view />
+      <!-- Include the Popup component -->
       <Popup />
     </main>
 
@@ -41,26 +45,89 @@
 </template>
 
 <script>
-import { computed } from 'vue';
-import { useAuthStore } from '@/stores/auth.js';
-import Payment from "@/views/Payment.vue";
-import Popup from "@/components/Popup.vue";
+import { ref, computed, onMounted, watch } from 'vue';
+import { useAuthStore } from '@/stores/auth';
+import { useRouter } from 'vue-router';
+import api from '@/services/api';
+import Popup from '@/components/Popup.vue';
 
 export default {
-  components: {Payment,  Popup},
+  name: 'App',
+  components: { Popup },
   setup() {
-    const auth = useAuthStore();
-    const isLoggedIn = computed(() => auth.isLoggedIn);
-    const userName = computed(() => auth.userName);
+    const dropdownVisible = ref(false);
+
+    const toggleDropdown = () => {
+      dropdownVisible.value = !dropdownVisible.value;
+    };
+    const authStore = useAuthStore();
+    const router = useRouter();
+
+    const isAuthenticated = computed(() => authStore.isAuthenticated);
+
+    // Reactive variable to store profile data
+    const profile = ref({});
+
+    // Fetch profile data function
+    const fetchProfile = async () => {
+      try {
+        const response = await api.get('/api/users/profile');
+        profile.value = response.data.data;
+      } catch (error) {
+        console.error('Error fetching profile:', error);
+      }
+    };
+
+    // Fetch profile data when the component is mounted
+    onMounted(() => {
+      if (isAuthenticated.value) {
+        fetchProfile();
+      }
+    });
+
+    // Watch for changes in authentication state
+    watch(isAuthenticated, (newValue) => {
+      if (newValue) {
+        fetchProfile();
+      } else {
+        profile.value = {}; // Clear profile data when logged out
+      }
+    });
+
+    // Computed property to get the user's full name
+    const userFullName = computed(() => {
+      const firstName = profile.value.firstName || '';
+      const lastName = profile.value.lastName || '';
+      const fullName = `${firstName} ${lastName}`.trim();
+      return fullName || profile.value.username || 'User';
+    });
+
+    // Hamburger menu state
+    const isMenuActive = ref(false);
+
+    const toggleMenu = () => {
+      isMenuActive.value = !isMenuActive.value;
+    };
+
+    const menuIcon = computed(() => {
+      return isMenuActive.value ? 'fas fa-times' : 'fas fa-bars';
+    });
 
     const handleLogout = () => {
-      auth.logout();
+      authStore.logout();
+      profile.value = {}; // Clear profile data on logout
+      router.push('/');
     };
 
     return {
-      isLoggedIn,
-      userName,
+      isAuthenticated,
+      userFullName,
       handleLogout,
+      isMenuActive,
+      toggleDropdown,
+      dropdownVisible,
+      toggleMenu,
+      menuIcon,
     };
   },
 };
@@ -69,7 +136,55 @@ export default {
 <style>
 /* Import Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+.auth-section {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
 
+.user-info {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: var(--secondary-color);
+  position: relative;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  padding: 10px;
+  z-index: 2000;
+  min-width: 120px;
+}
+
+.dropdown-item {
+  padding: 10px;
+  font-size: 0.99rem;
+  color: #333;
+  text-decoration: none;
+  display: block;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.dropdown-item:hover {
+  background-color: #f5f7fa;
+}
+
+.logout-button {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  padding: 10px;
+}
 /* CSS Variables for Theming */
 :root {
   --primary-color: #4A90E2;
@@ -290,11 +405,13 @@ body {
 }
 
 /* Utility Classes */
-button, .login-button {
+button,
+.login-button {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.dark-mode button, .dark-mode .login-button {
+.dark-mode button,
+.dark-mode .login-button {
   box-shadow: 0 4px 6px rgba(255, 255, 255, 0.1);
 }
 

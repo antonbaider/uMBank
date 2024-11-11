@@ -13,6 +13,7 @@
     "axios": "^1.7.7",
     "chart.js": "^4.4.6",
     "jose": "^4.14.4",
+    "jwt-decode": "^4.0.0",
     "pinia": "^2.0.32",
     "pinia-plugin-persistedstate": "^4.1.2",
     "vue": "^3.2.31",

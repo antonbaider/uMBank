@@ -1,3 +1,4 @@
+<!-- src/views/Payment.vue -->
 <template>
   <div class="payment-page">
     <div class="payment-card">
@@ -29,7 +30,6 @@
               v-model="receiverCardNumber"
               placeholder="Enter receiver's card number"
               required
-
           />
         </div>
 
@@ -45,12 +45,10 @@
           />
         </div>
 
-        <!-- Adding @click for direct binding as fallback -->
         <button
             type="submit"
             class="payment-button"
             :disabled="!isFormValid || loading"
-            @click="handlePayment"
         >
           <span v-if="loading">Processing...</span>
           <span v-else>Send Payment</span>
@@ -67,6 +65,7 @@
         {{ errorMessage }}
       </div>
 
+      <!-- Display transaction details -->
       <div v-if="transaction" class="transaction-info">
         <h3>Transaction Details</h3>
         <ul>
@@ -102,7 +101,11 @@ export default {
     const fetchAvailableCards = async () => {
       try {
         const response = await api.get('/api/accounts');
-        availableCards.value = response.data.data;
+        if (response.data && response.data.data) {
+          availableCards.value = response.data.data;
+        } else {
+          console.error('No cards data found.');
+        }
       } catch (error) {
         console.error('Error fetching accounts:', error);
       }
@@ -110,7 +113,6 @@ export default {
 
     // Handle payment submission
     const handlePayment = async () => {
-      console.log('handlePayment triggered'); // Debugging to ensure the method runs
       loading.value = true;
       successMessage.value = '';
       errorMessage.value = '';
@@ -123,10 +125,14 @@ export default {
           amount: parseFloat(amount.value),
         });
 
-        successMessage.value = 'Congratulations! Transfer by card was successful.';
-        transaction.value = response.data.data;
+        if (response.data && response.data.data) {
+          successMessage.value = 'Transfer was successful!';
+          transaction.value = response.data.data;
+        } else {
+          errorMessage.value = 'Payment failed. Please try again.';
+        }
       } catch (error) {
-        console.error('Error during payment:', error); // Log error for further insight
+        console.error('Error during payment:', error);
         errorMessage.value = error.response?.data?.message || 'Payment failed. Please try again.';
       } finally {
         loading.value = false;
@@ -135,7 +141,11 @@ export default {
 
     // Check if form fields are valid to enable the submit button
     const isFormValid = computed(() => {
-      return selectedSenderCard.value && receiverCardNumber.value && amount.value > 0;
+      return (
+          selectedSenderCard.value &&
+          receiverCardNumber.value &&
+          amount.value > 0
+      );
     });
 
     const formatDate = (timestamp) => {
@@ -160,6 +170,7 @@ export default {
   },
 };
 </script>
+
 
 <style scoped>
 .payment-page {
