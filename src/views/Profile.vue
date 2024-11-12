@@ -5,7 +5,7 @@
       <div class="profile-header">
       <h2 class="username">
         <RoleAvatar :role="profile.role" :username="profile.username" />
-        <h1 class="username">{{ profile.username }}</h1>
+
       </h2>
       </div>
       <form @submit.prevent="updateProfile" class="profile-form">
